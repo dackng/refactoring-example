@@ -12,7 +12,7 @@ public class LoggerConfig {
 	public void validateLogTypes() {
 		if (logTypes.isEmpty()) throw new LoggerException("Invalid configuration");
 	}
-	public void addLogType(GeneralLogger log) {
+	public void add(GeneralLogger log) {
 		log.getMessageTypes().forEach(item -> item.validateConsistency());
 		logTypes.add(log);
 	}

@@ -31,13 +31,13 @@ public class LoggerServiceTests {
 		
 		LoggerConfig jobLogger = new LoggerConfig();
 		ConsoleLogger consoleLog = new ConsoleLogger(warning,error);
-		jobLogger.addLogType(consoleLog);
+		jobLogger.add(consoleLog);
 		
 		DatabaseLogger databaseLog = new DatabaseLogger(message, error);
-		jobLogger.addLogType(databaseLog);
+		jobLogger.add(databaseLog);
 		
 		FileLogger fileLog = new FileLogger(PropertiesValue.FILE_DIRECTORY, PropertiesValue.FILE_NAME, warning);
-		jobLogger.addLogType(fileLog);
+		jobLogger.add(fileLog);
 		
 		loggerService = new LoggerService(jobLogger);
 	}
