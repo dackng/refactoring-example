@@ -1,12 +1,16 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import log.ConsoleLog;
-import log.DatabaseLog;
-import log.FileLog;
-import log.JobLogger;
+import config.DBConfig;
+import logger.ConsoleLogger;
+import logger.DatabaseLogger;
+import logger.FileLogger;
+import logger.LoggerConfig;
 import message.Message;
 import message.MessageType;
 import service.LoggerService;
@@ -25,22 +29,30 @@ public class LoggerServiceTests {
 		warning = new MessageType(Level.WARNING);
 		error = new MessageType(Level.SEVERE);
 		
-		JobLogger jobLogger = new JobLogger();
-		ConsoleLog consoleLog = new ConsoleLog(message);
+		LoggerConfig jobLogger = new LoggerConfig();
+		ConsoleLogger consoleLog = new ConsoleLogger(warning,error);
 		jobLogger.addLogType(consoleLog);
 		
-//		DatabaseLog databaseLog = new DatabaseLog(message, error);
-//		jobLogger.addLogType(databaseLog);
-//		
-//		FileLog fileLog = new FileLog(PropertiesValue.FILE_DIRECTORY, PropertiesValue.FILE_NAME, warning, error);
-//		jobLogger.addLogType(fileLog);
+		DatabaseLogger databaseLog = new DatabaseLogger(message, error);
+		jobLogger.addLogType(databaseLog);
+		
+		FileLogger fileLog = new FileLogger(PropertiesValue.FILE_DIRECTORY, PropertiesValue.FILE_NAME, warning);
+		jobLogger.addLogType(fileLog);
 		
 		loggerService = new LoggerService(jobLogger);
 	}
 	
 	@Test
 	public void logMessageTest(){
-		loggerService.log(new Message("test", message));
-		System.out.println("HOLA");
+		loggerService.log(new Message("test", warning));
+	}
+	@Test
+	public void showDatabase() throws SQLException {
+		Statement stmt = DBConfig.getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Log_Values");
+		while (rs.next()) {
+            System.out.println("{ Message: "+rs.getString("text")+", Type: "+rs.getString("type")+"}");
+        }
+		stmt.close();
 	}
 }

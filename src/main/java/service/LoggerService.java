@@ -1,22 +1,23 @@
 package service;
 import java.util.logging.Logger;
 
-import log.JobLogger;
+import logger.LoggerConfig;
 import message.Message;
 
 public class LoggerService {
 	private static final Logger logger = Logger.getLogger("JobService");
-	private JobLogger jobLogger;
+	private LoggerConfig loggerConfig;
 	
-	public LoggerService(JobLogger jobLogger) {
-		this.jobLogger = jobLogger;
+	public LoggerService(LoggerConfig loggerConfig){
+		this.loggerConfig = loggerConfig;
 	}
 	public void log(Message message) {
 		try {
-			jobLogger.validateLogTypes();
+			loggerConfig.validateLogTypes();
 			message.validate();
-			jobLogger.validateSpecificMessageType(message.getMessageType());
-			jobLogger.getLogTypes().stream().forEach(item -> item.log(message));	
+			loggerConfig.getLogTypes().stream().forEach(logger -> {
+				if(logger.isContained(message.getMessageType())) logger.log(message);
+			});	
 		}catch(Exception e) {
 			logger.severe(e.getMessage());
 		}

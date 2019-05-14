@@ -1,4 +1,4 @@
-package log;
+package logger;
 
 import java.io.File;
 import java.util.logging.FileHandler;
@@ -8,10 +8,10 @@ import config.LoggerException;
 import message.Message;
 import message.MessageType;
 
-public class FileLog extends Log{
+public class FileLogger extends GeneralLogger{
 	private static final Logger logger = Logger.getLogger("FileLog");
 	private String path;
-	public FileLog(String fileDirectory, String fileName, MessageType... messageTypes) {
+	public FileLogger(String fileDirectory, String fileName, MessageType... messageTypes) {
 		super(messageTypes);
 		this.path = fileDirectory + fileName;
 		createFile();
