@@ -1,6 +1,5 @@
 package logger;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import config.DBConfig;
@@ -13,14 +12,13 @@ public class DatabaseLogger extends GeneralLogger{
 		super(messageTypes);
 	}
 	@Override
-	public void log(Message message) {
-		Statement stmt;
+	public void log(Message message){
+		Statement stmt = null;
 		try {
 			stmt = DBConfig.getConnection().createStatement();
 			stmt.executeUpdate("insert into Log_Values (id, text, type) values (100,'" + message.getText() + "', '" 
 					+ message.getMessageType().getLevel().getName() + "')");
-			stmt.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new LoggerException("There was a problem logging a message in database");
 		}

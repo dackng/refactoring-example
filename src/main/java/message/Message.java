@@ -18,7 +18,7 @@ public class Message {
 		text.trim();
 		if (text.isEmpty()) throw new LoggerException("Message text must not contain whitespace");
 	}
-	public void validateType() {
+	private void validateType() {
 		if (messageType == null) throw new LoggerException("Message type must be specified");
 	}
 	public String getText() {
